@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.springframework.social.daum.blog.api.Comment;
 import org.springframework.social.daum.blog.api.CommentOperations;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Seongju-Jo
@@ -84,7 +85,7 @@ public class CommentTemplate extends AbstractDaumBlogOperations implements Comme
 		
 		List<Comment> comments = null;
 		
-		Iterator<JsonNode> item = extractNecessaryNode(response).path(N_ITEM).getElements();
+		Iterator<JsonNode> item = extractNecessaryNode(response).path(N_ITEM).elements();
 		while (item.hasNext()) {
 			if (comments == null) {
 				comments = new ArrayList<Comment> ();
@@ -103,15 +104,15 @@ public class CommentTemplate extends AbstractDaumBlogOperations implements Comme
 		}
 		
 		Comment comment = new Comment();
-		comment.setCommentId(Integer.parseInt(jsonNode.path(N_COMMENT_ID).getTextValue()));
-		comment.setContent(jsonNode.path(N_CONTENT).getTextValue());
-		comment.setName(jsonNode.path(N_NAME).getTextValue());
-		comment.setUrl(jsonNode.path(N_URL).getTextValue());
-		if (StringUtils.hasText(jsonNode.path(N_PARENT_ID).getTextValue())) {
-			comment.setParentId(Integer.parseInt(jsonNode.path(N_PARENT_ID).getTextValue()));
+		comment.setCommentId(Integer.parseInt(jsonNode.path(N_COMMENT_ID).textValue()));
+		comment.setContent(jsonNode.path(N_CONTENT).textValue());
+		comment.setName(jsonNode.path(N_NAME).textValue());
+		comment.setUrl(jsonNode.path(N_URL).textValue());
+		if (StringUtils.hasText(jsonNode.path(N_PARENT_ID).textValue())) {
+			comment.setParentId(Integer.parseInt(jsonNode.path(N_PARENT_ID).textValue()));
 		}
 		try {
-			comment.setCommentTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jsonNode.path(N_DATE).getTextValue()));
+			comment.setCommentTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jsonNode.path(N_DATE).textValue()));
 		} catch (ParseException e) {
 		}
 		
