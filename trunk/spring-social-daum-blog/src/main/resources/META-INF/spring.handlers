@@ -1,0 +1,1 @@
+http\://www.springframework.org/schema/social/daum/blog=org.springframework.social.daum.blog.config.xml.DaumBlogNamespaceHandler
