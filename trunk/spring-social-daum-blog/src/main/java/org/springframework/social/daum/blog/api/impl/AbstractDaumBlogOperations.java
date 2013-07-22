@@ -6,12 +6,13 @@ package org.springframework.social.daum.blog.api.impl;
 
 import java.net.URI;
 
-import org.codehaus.jackson.JsonNode;
 import org.springframework.social.MissingAuthorizationException;
 import org.springframework.social.support.URIBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Seongju-Jo
@@ -72,7 +73,7 @@ class AbstractDaumBlogOperations {
 	
 	protected void requireAuthorization() {
 		if (!isAuthorized) {
-			throw new MissingAuthorizationException();
+			throw new MissingAuthorizationException("require authorization");
 		}
 	}
 	

@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.springframework.social.daum.blog.api.Category;
 import org.springframework.social.daum.blog.api.CategoryOperations;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Seongju-Jo
@@ -42,7 +43,7 @@ public class CategoryTemplate extends AbstractDaumBlogOperations implements Cate
 		
 		JsonNode items = extractNecessaryNode(response).path(N_ITEMS);
 		
-		Iterator<JsonNode> iterator = items.getElements();
+		Iterator<JsonNode> iterator = items.elements();
 		
 		while (iterator.hasNext()) {
 			
@@ -59,10 +60,10 @@ public class CategoryTemplate extends AbstractDaumBlogOperations implements Cate
 	private Category convertToCategory(JsonNode jsonNode) {
 		
 		Category category = new Category();
-		category.setOpen("OPEN".equals(jsonNode.path(N_OPEN).getTextValue()) ? true : false);
-		System.out.println(jsonNode.path(N_CATEGORY_ID).getTextValue());
-		category.setCategoryId(Integer.parseInt(jsonNode.path(N_CATEGORY_ID).getTextValue()));
-		category.setName(jsonNode.path(N_NAME).getTextValue());
+		category.setOpen("OPEN".equals(jsonNode.path(N_OPEN).textValue()) ? true : false);
+		System.out.println(jsonNode.path(N_CATEGORY_ID).textValue());
+		category.setCategoryId(Integer.parseInt(jsonNode.path(N_CATEGORY_ID).textValue()));
+		category.setName(jsonNode.path(N_NAME).textValue());
 		
 		return category;
 	}

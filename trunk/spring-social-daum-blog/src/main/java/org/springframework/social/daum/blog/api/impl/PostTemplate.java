@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.social.daum.blog.api.Attachment;
 import org.springframework.social.daum.blog.api.Post;
@@ -20,6 +19,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Seongju-Jo
@@ -202,7 +203,7 @@ public class PostTemplate extends AbstractDaumBlogOperations implements PostOper
 	}
 	
 	private int extractPostId(JsonNode response) {
-		return Integer.parseInt(extractNecessaryNode(response).path(N_POST_ID).getTextValue());
+		return Integer.parseInt(extractNecessaryNode(response).path(N_POST_ID).textValue());
 	}
 	
 	private List<Post> convertToPosts(JsonNode response) {
@@ -211,7 +212,7 @@ public class PostTemplate extends AbstractDaumBlogOperations implements PostOper
 		
 		JsonNode items = extractNecessaryNode(response).path(N_ITEM);
 		
-		Iterator<JsonNode> iterator = items.getElements();
+		Iterator<JsonNode> iterator = items.elements();
 		
 		while (iterator.hasNext()) {
 			if (posts == null) {
@@ -231,7 +232,7 @@ public class PostTemplate extends AbstractDaumBlogOperations implements PostOper
 		
 		if (convertType == POST_CONVERT_TYPE_VIEW) {
 			nodeToUse = extractNecessaryNode(jsonNode);
-			post.setScrapPrmtKind(nodeToUse.path(N_SCRAP_PRMT_KIND).getTextValue());
+			post.setScrapPrmtKind(nodeToUse.path(N_SCRAP_PRMT_KIND).textValue());
 			Post pre = convertToPost(nodeToUse.path(N_PREVIOUS_POST), POST_CONVERT_TYPE_SIDE);
 			Post next = convertToPost(nodeToUse.path(N_NEXT_POST), POST_CONVERT_TYPE_SIDE);
 			if (pre != null) {
@@ -245,46 +246,46 @@ public class PostTemplate extends AbstractDaumBlogOperations implements PostOper
 		}
 		
 		if (convertType == POST_CONVERT_TYPE_SIDE) {
-			post.setPostId(Integer.parseInt(nodeToUse.path(N_ID).getTextValue()));
+			post.setPostId(Integer.parseInt(nodeToUse.path(N_ID).textValue()));
 		} else {			
-			post.setPostId(Integer.parseInt(nodeToUse.path(N_POST_ID).getTextValue()));
+			post.setPostId(Integer.parseInt(nodeToUse.path(N_POST_ID).textValue()));
 		}
-		post.setTitle(nodeToUse.path(N_TITLE).getTextValue());
-		post.setContent(nodeToUse.path(N_CONTENT).getTextValue());
-		post.setUrl(nodeToUse.path(N_URL).getTextValue());
-		post.setNickname(nodeToUse.path(N_NICKNAME).getTextValue());
-		post.setScrap("Y".equals(nodeToUse.path(N_IS_SCRAP).getTextValue()) ? true : false);
-		post.setOpenType(nodeToUse.path(N_OPEN).getTextValue());
-		if (StringUtils.hasText(nodeToUse.path(N_COMMENTS).getTextValue())) {			
-			post.setCommentCount(Integer.parseInt(nodeToUse.path(N_COMMENTS).getTextValue()));
+		post.setTitle(nodeToUse.path(N_TITLE).textValue());
+		post.setContent(nodeToUse.path(N_CONTENT).textValue());
+		post.setUrl(nodeToUse.path(N_URL).textValue());
+		post.setNickname(nodeToUse.path(N_NICKNAME).textValue());
+		post.setScrap("Y".equals(nodeToUse.path(N_IS_SCRAP).textValue()) ? true : false);
+		post.setOpenType(nodeToUse.path(N_OPEN).textValue());
+		if (StringUtils.hasText(nodeToUse.path(N_COMMENTS).textValue())) {			
+			post.setCommentCount(Integer.parseInt(nodeToUse.path(N_COMMENTS).textValue()));
 		}
-		if (StringUtils.hasText(nodeToUse.path(N_TRACKBACKS).getTextValue())) {			
-			post.setTrackbackCount(Integer.parseInt(nodeToUse.path(N_TRACKBACKS).getTextValue()));
+		if (StringUtils.hasText(nodeToUse.path(N_TRACKBACKS).textValue())) {			
+			post.setTrackbackCount(Integer.parseInt(nodeToUse.path(N_TRACKBACKS).textValue()));
 		}
-		if (nodeToUse.path(N_VIEW_CATEGORY_ID).getTextValue() != null) {
-			post.setViewCategoryId(Integer.parseInt(nodeToUse.path(N_VIEW_CATEGORY_ID).getTextValue()));
+		if (nodeToUse.path(N_VIEW_CATEGORY_ID).textValue() != null) {
+			post.setViewCategoryId(Integer.parseInt(nodeToUse.path(N_VIEW_CATEGORY_ID).textValue()));
 		}
-		if (nodeToUse.path(N_VIEW_ID).getTextValue() != null) {			
-			post.setViewId(Integer.parseInt(nodeToUse.path(N_VIEW_ID).getTextValue()));
+		if (nodeToUse.path(N_VIEW_ID).textValue() != null) {			
+			post.setViewId(Integer.parseInt(nodeToUse.path(N_VIEW_ID).textValue()));
 		}
 		try {
-			if (StringUtils.hasText(nodeToUse.path(N_DATE).getTextValue())) {
+			if (StringUtils.hasText(nodeToUse.path(N_DATE).textValue())) {
 				String format = null;
 				if (convertType == POST_CONVERT_TYPE_VIEW) {
 					format = "yyyy.MM.dd";
 				} else {					
 					format = "yyyy-MM-dd HH:mm:ss";
 				}
-				post.setPostTime(new SimpleDateFormat(format).parse(nodeToUse.path(N_DATE).getTextValue()));
+				post.setPostTime(new SimpleDateFormat(format).parse(nodeToUse.path(N_DATE).textValue()));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if (StringUtils.hasText(nodeToUse.path(N_CATEGORY_ID).getTextValue())) {			
-			post.setCategoryId(Integer.parseInt(nodeToUse.path(N_CATEGORY_ID).getTextValue()));
+		if (StringUtils.hasText(nodeToUse.path(N_CATEGORY_ID).textValue())) {			
+			post.setCategoryId(Integer.parseInt(nodeToUse.path(N_CATEGORY_ID).textValue()));
 		}
-		if (StringUtils.hasText(nodeToUse.path(N_CATEGORY_NAME).getTextValue())) {			
-			post.setCategoryName(nodeToUse.path(N_CATEGORY_NAME).getTextValue());
+		if (StringUtils.hasText(nodeToUse.path(N_CATEGORY_NAME).textValue())) {			
+			post.setCategoryName(nodeToUse.path(N_CATEGORY_NAME).textValue());
 		}
 		
 		return post;
@@ -292,7 +293,7 @@ public class PostTemplate extends AbstractDaumBlogOperations implements PostOper
 
 	private Attachment convertToAttachment(JsonNode response, String fileName, String fileType, long fileSize) {
 		
-		String fileUrl = extractNecessaryNode(response).path(N_URL).getTextValue();
+		String fileUrl = extractNecessaryNode(response).path(N_URL).textValue();
 		Attachment attachment = new Attachment(fileName, fileType, fileSize, fileUrl);
 
 		return attachment;
